@@ -10,6 +10,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../utils/query-keys';
 import { toast } from 'sonner';
 import { ChatEmpty } from './chat-empty';
+import { ChatMessages } from './chat-messages';
+import { ChatComposer } from './chat-composer';
 
 type ConversationViewProps = {
     conversationId: string;

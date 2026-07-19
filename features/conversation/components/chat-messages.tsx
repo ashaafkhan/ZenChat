@@ -14,6 +14,7 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 import { Loader } from "@/components/ai-elements/loader";
+import { Tool } from "@/components/ai-elements/tool";
 
 /** Extracts plain text from a `UIMessage` by joining all text parts. */
 function getMessageText(message: UIMessage) {
@@ -41,7 +42,15 @@ export function ChatMessages({ messages, status }: ChatMessagesProps) {
         {messages.map((message) => (
           <Message key={message.id} from={message.role}>
             <MessageContent>
-              <MessageResponse>{getMessageText(message)}</MessageResponse>
+              {message.parts.map((part, i) => {
+                if (isTextUIPart(part)) {
+                  return <MessageResponse key={i}>{part.text}</MessageResponse>;
+                }
+                if (part.type === "tool-invocation" || part.type === "tool-web_search" || (part as any).toolName === "web_search") {
+                  return <Tool key={i} part={part} />;
+                }
+                return null;
+              })}
             </MessageContent>
           </Message>
         ))}

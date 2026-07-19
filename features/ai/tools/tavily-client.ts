@@ -37,6 +37,9 @@ export async function searchWeb(
         });
 
         if (!response.ok) {
+            if (response.status === 429) {
+                throw new TavilySearchError("Search rate limit reached, try again in a moment");
+            }
             throw new TavilySearchError(`Tavily API returned status: ${response.status}`);
         }
 

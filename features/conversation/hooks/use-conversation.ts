@@ -26,11 +26,11 @@ export function useCreateConversation() {
 
     return useMutation({
         mutationFn: (title?: string) => createConversation(title),
-        onSuccess: (conversation) => {
+        onSuccess: (conversation: any) => {
             void queryClient.invalidateQueries({
                 queryKey: queryKeys.conversations.all,
             });
-            router.push(`/c/${conversation.id}`);
+            router.push(`/c/${conversation.id}?branch=${conversation.branchId}`);
         },
         onError: (error: Error) => {
             toast.error(error.message || "Could not create chat");

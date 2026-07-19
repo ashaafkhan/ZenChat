@@ -127,12 +127,10 @@ export const BranchSwitcher = ({ conversationId, activeBranchId, title, messages
     return (
         <div className="flex items-center gap-2 overflow-hidden">
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-8 px-2 flex items-center gap-2 max-w-sm">
-                        <GitBranchIcon className="h-4 w-4 shrink-0" />
-                        <span className="truncate">{lineage.at(-1)?.name || "Branch"}</span>
-                        <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
+                <DropdownMenuTrigger render={<Button variant="ghost" size="sm" className="h-8 px-2 flex items-center gap-2 max-w-sm" />}>
+                    <GitBranchIcon className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{lineage.at(-1)?.name || "Branch"}</span>
+                    <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-50" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-64 max-h-[70vh] overflow-y-auto">
                     <DropdownMenuLabel className="truncate opacity-70 font-normal">
@@ -156,10 +154,10 @@ export const BranchSwitcher = ({ conversationId, activeBranchId, title, messages
                                 </div>
                                 {!branch.parentBranchId ? null : (
                                     <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger asChild>
-                                            <div onClick={(e) => e.stopPropagation()} className="p-1 cursor-pointer rounded hover:bg-accent opacity-50 hover:opacity-100">
-                                                <MoreHorizontalIcon className="h-4 w-4" />
-                                            </div>
+                                        <DropdownMenuSubTrigger render={
+                                            <div onClick={(e) => e.stopPropagation()} className="p-1 cursor-pointer rounded hover:bg-accent opacity-50 hover:opacity-100" />
+                                        }>
+                                            <MoreHorizontalIcon className="h-4 w-4" />
                                         </DropdownMenuSubTrigger>
                                         <DropdownMenuSubContent>
                                             <DropdownMenuItem onClick={(e) => {

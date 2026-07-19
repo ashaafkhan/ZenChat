@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 const page = async () => {
-  const conversationId = await startNewChat()
+  const { conversationId, branchId } = await startNewChat()
 
-  redirect(`/c/${conversationId}`)
+  redirect(`/c/${conversationId}?branch=${branchId}`)
 }
 
 export default page

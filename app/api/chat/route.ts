@@ -9,26 +9,31 @@ import { convertToModelMessages, createIdGenerator, createUIMessageStream, creat
 export async function POST(req: Request) {
     await auth.protect();
 
-    const { message, id }: { message: UIMessage, id: string } = await req.json();
+    const { message, branchId }: { message: UIMessage, branchId: string } = await req.json();
 
-    if (!message || !id) {
-        return new Response("Missing message or conversation id", { status: 400 });
+    if (!message || !branchId) {
+        return new Response("Missing message or branch id", { status: 400 });
     }
 
     const user = await requireUser();
 
-    const conversation = await prisma.conversation.findFirst({
+    const branch = await prisma.branch.findFirst({
         where: {
-            id,
-            userId: user.id
-        }
+            id: branchId,
+            conversation: {
+                userId: user.id
+            }
+        },
+        include: { conversation: true }
     });
 
-    if (!conversation) {
-        return new Response("Conversation not found.", { status: 404 });
+    if (!branch) {
+        return new Response("Branch not found.", { status: 404 });
     }
+    
+    const conversation = branch.conversation;
 
-    const previousMessages = await loadChatMessages(id);
+    const previousMessages = await loadChatMessages(branchId);
 
     const alreadySaved = previousMessages.some(
         (storedMessage) => storedMessage.id === message.id
@@ -37,7 +42,7 @@ export async function POST(req: Request) {
     const messages = alreadySaved ? previousMessages : [...previousMessages, message];
 
     if (!alreadySaved) {
-        await saveChatMessages(id, [message]);
+        await saveChatMessages(branchId, [message]);
     }
 
     const result = streamText({

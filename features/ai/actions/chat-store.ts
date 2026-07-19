@@ -3,6 +3,7 @@
 import { isTextUIPart, type UIMessage } from "ai";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { prisma } from "@/lib/db";
+import { getBranchMessages } from "@/features/branches/actions/branch-actions";
 
 function getMessageText(message: UIMessage) {
   return message.parts.filter(isTextUIPart).map((part) => part.text).join("");
@@ -23,14 +24,11 @@ function toUIMessageParts(
 
 
 export async function loadChatMessages(
-  conversationId: string
+  branchId: string
 ): Promise<UIMessage[]> {
-  const rows = await prisma.message.findMany({
-    where: { conversationId },
-    orderBy: { createdAt: "asc" },
-  });
+  const rows = await getBranchMessages(branchId);
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     id: row.id,
     role: row.role === "ASSISTANT" ? "assistant" : "user",
     parts: toUIMessageParts(row.parts, row.content),
@@ -43,11 +41,13 @@ type SaveChatMessagesOptions = {
 
 
 export async function saveChatMessages(
-  conversationId: string,
+  branchId: string,
   messages: UIMessage[],
   options: SaveChatMessagesOptions = {}
 ) {
   const { updateTitle = true } = options;
+  const branch = await prisma.branch.findUniqueOrThrow({ where: { id: branchId } });
+  const conversationId = branch.conversationId;
 
   for (const message of messages) {
     if (message.role === "system") continue;
@@ -60,6 +60,7 @@ export async function saveChatMessages(
       create: {
         id: message.id,
         conversationId,
+        branchId,
         role,
         status: "COMPLETE",
         content,
@@ -86,7 +87,7 @@ export async function saveChatMessages(
     data: {
       lastMessageAt: new Date(),
       title:
-        updateTitle && conversation.title === "New Chat" && firstUserText
+        updateTitle && conversation.title === "New Chat" && firstUserText && branch.parentBranchId === null
           ? firstUserText.slice(0, 48)
           : conversation.title,
     },

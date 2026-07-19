@@ -15,10 +15,11 @@ import { ChatComposer } from './chat-composer';
 
 type ConversationViewProps = {
     conversationId: string;
+    branchId: string;
     initialMessages: UIMessage[];
 };
 
-export const ConversationView = ({ conversationId, initialMessages }: ConversationViewProps) => {
+export const ConversationView = ({ conversationId, branchId, initialMessages }: ConversationViewProps) => {
 
 
     const queryClient = useQueryClient();
@@ -28,10 +29,10 @@ export const ConversationView = ({ conversationId, initialMessages }: Conversati
         api: "/api/chat",
         prepareSendMessagesRequest: ({id,messages}) => ({
             body: {
-                id, message: messages.at(-1)
+                branchId, message: messages.at(-1)
             }
         })
-    }),[]);
+    }),[branchId]);
 
     const { messages, sendMessage, status } = useChat({
         id: conversationId,

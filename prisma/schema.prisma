@@ -40,6 +40,7 @@ model Conversation{
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 
   messages Message[]
+  branches Branch[]   // NEW
 
   @@index([userId, lastMessageAt(sort:Desc)])
   @@index([userId, isPinned, lastMessageAt(sort:Desc)])
@@ -58,9 +59,29 @@ enum MessageStatus{
   ERROR
 }
 
+// NEW MODEL
+model Branch {
+  id                   String   @id @default(cuid())
+  conversationId       String
+  name                 String   @default("Main")
+  parentBranchId       String?
+  branchPointMessageId String?  // id of the LAST shared message, living in the parent branch
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  parent       Branch?      @relation("BranchTree", fields: [parentBranchId], references: [id], onDelete: SetNull)
+  children     Branch[]     @relation("BranchTree")
+  messages     Message[]
+
+  @@index([conversationId])
+  @@index([parentBranchId])
+}
+
 model Message{
   id                String @id @default(cuid())
   conversationId    String
+  branchId          String   // NEW
   role              MessageRole
   status            MessageStatus @default(COMPLETE)
   content           String @db.Text 
@@ -68,10 +89,12 @@ model Message{
   metadata          Json? 
 
   conversation Conversation @relation(fields: [conversationId],references: [id],onDelete: Cascade)
+  branch       Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade) // NEW
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
   @@index([conversationId, createdAt(sort: Desc)])
+  @@index([branchId, createdAt(sort: Desc)]) // NEW
 }
 

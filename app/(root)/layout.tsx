@@ -7,9 +7,9 @@ const RootGrouplayout = async({children}:{children:React.ReactNode}) => {
 await auth.protect();
 await onBoard();
   return (
-    <div>
+    <ChatShell>
         {children}
-    </div>
+    </ChatShell>
   )
 }
 

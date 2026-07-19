@@ -59,7 +59,7 @@ export async function listMessages(
 }
 
 
-export async function createMessage(conversationId: string, content: string) {
+export async function createMessage(conversationId: string, content: string, branchId?: string) {
     const user = await requireUser();
     const conversation = await assertOwnsConversation(conversationId, user.id);
 
@@ -69,9 +69,23 @@ export async function createMessage(conversationId: string, content: string) {
         throw new Error("Message cannot be empty");
     }
 
+    // If no branchId given, find the root branch for this conversation
+    let resolvedBranchId = branchId;
+    if (!resolvedBranchId) {
+        const rootBranch = await prisma.branch.findFirst({
+            where: { conversationId, parentBranchId: null }
+        });
+        resolvedBranchId = rootBranch?.id;
+    }
+
+    if (!resolvedBranchId) {
+        throw new Error("No branch found for this conversation");
+    }
+
     const message = await prisma.message.create({
         data: {
             conversationId,
+            branchId: resolvedBranchId,
             role: "USER",
             status: "COMPLETE",
             content: trimmed,

@@ -28,10 +28,10 @@ export const BranchFromMessageButton = ({ conversationId, message }: { conversat
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <MessageActions className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <DialogTrigger asChild>
-                    <MessageAction tooltip="Branch from here">
-                        <GitBranchIcon />
-                    </MessageAction>
+                <DialogTrigger render={
+                    <MessageAction tooltip="Branch from here" />
+                }>
+                    <GitBranchIcon />
                 </DialogTrigger>
             </MessageActions>
             <DialogContent>

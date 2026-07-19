@@ -61,7 +61,6 @@ export async function POST(req: Request) {
         Always maintain a respectful, objective, and supportive tone.`,
 
         messages: await convertToModelMessages(messages),
-        maxSteps: 4,
         tools: { web_search: webSearchTool },
     });
 
@@ -74,7 +73,7 @@ export async function POST(req: Request) {
             generateMessageId: createIdGenerator({ prefix: "msg", size: 16 }),
             onEnd: async ({ messages: finalMessages }) => {
                 try {
-                    await saveChatMessages(id, finalMessages, { updateTitle: false })
+                    await saveChatMessages(branchId, finalMessages, { updateTitle: false })
                 } catch (error) {
                     console.error(error);
                 }

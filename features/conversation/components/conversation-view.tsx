@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { ChatEmpty } from './chat-empty';
 import { ChatMessages } from './chat-messages';
 import { ChatComposer } from './chat-composer';
+import { BranchSwitcher } from '@/features/branches/components/branch-switcher';
 
 type ConversationViewProps = {
     conversationId: string;
@@ -53,16 +54,21 @@ export const ConversationView = ({ conversationId, branchId, initialMessages }: 
 
     return (
         <div className="flex h-full min-h-0 flex-1 flex-col">
-            <header className="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+            <header className="flex h-14 shrink-0 items-center gap-2 border-b px-3 overflow-hidden">
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mx-1 h-4" />
-                <h1 className="truncate text-sm font-medium">{title}</h1>
+                <BranchSwitcher 
+                    conversationId={conversationId} 
+                    activeBranchId={branchId} 
+                    title={title} 
+                    messages={messages}
+                />
             </header>
 
             {messages.length === 0 ? (
                 <ChatEmpty />
             ) : (
-                <ChatMessages messages={messages} status={status} />
+                <ChatMessages conversationId={conversationId} messages={messages} status={status} />
             )}
 
             <ChatComposer

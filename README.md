@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZenChat
 
-## Getting Started
+ZenChat is an advanced chat application powered by Next.js, Clerk for authentication, Prisma + Postgres for data persistence, and the AI SDK. It features **seamless tool calling** (integrating Tavily for live web search functionality directly in the chat) and an innovative **conversation branching system**, allowing users to diverge their chats from any historical message and easily navigate between alternative timelines using a nested branch switcher.
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Install dependencies:**
+   ```bash
+   bun install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Configure environment:**
+   Copy the example environment file and fill in your keys:
+   ```bash
+   cp .env.example .env
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Database initialization:**
+   Run the Prisma migrations to set up your PostgreSQL database (Neon or Supabase work great):
+   ```bash
+   npx prisma migrate deploy
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Start development server:**
+   ```bash
+   bun dev
+   ```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Description | Where to obtain |
+|----------|-------------|-----------------|
+| `DATABASE_URL` | PostgreSQL connection string | Neon, Supabase, etc. |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Auth frontend key | Clerk Dashboard |
+| `CLERK_SECRET_KEY` | Clerk Auth backend key | Clerk Dashboard |
+| `GROQ_API_KEY` | Groq LLM API Key | [Groq Console](https://console.groq.com/keys) |
+| `TAVILY_API_KEY` | Tavily Web Search API Key | [Tavily Dashboard](https://app.tavily.com/home) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ZenChat employs a clean separation of concerns using Next.js App Router server actions and TanStack Query on the client. 
+- **Tool Calling:** We extend the AI SDK `streamText` response with a typed `webSearchTool` that utilizes the Tavily API. The client securely parses the multi-part tool results and maps them into rich React components (`<Tool />`), gracefully falling back with 429/401 handlers.
+- **Branching:** The Prisma schema represents branches as a tree `(Branch -> parentBranchId, branchPointMessageId)`. Each `Message` is tagged with its `branchId`. The UI uses `useChat` keyed by `branchId`, completely isolating state per branch. Switching branches dynamically calculates lineage without extra queries.
 
-## Deploy on Vercel
+## Live Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Live Demo URL]

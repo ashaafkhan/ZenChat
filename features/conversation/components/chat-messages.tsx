@@ -15,6 +15,7 @@ import {
 } from "@/components/ai-elements/message";
 import { Loader } from "@/components/ai-elements/loader";
 import { Tool } from "@/components/ai-elements/tool";
+import { BranchFromMessageButton } from "@/features/branches/components/branch-from-message-button";
 
 /** Extracts plain text from a `UIMessage` by joining all text parts. */
 function getMessageText(message: UIMessage) {
@@ -25,6 +26,7 @@ function getMessageText(message: UIMessage) {
 }
 
 type ChatMessagesProps = {
+  conversationId: string;
   messages: UIMessage[];
   status: ChatStatus;
 };
@@ -32,7 +34,7 @@ type ChatMessagesProps = {
 /**
  * Renders the conversation message list with markdown responses and a loading indicator.
  */
-export function ChatMessages({ messages, status }: ChatMessagesProps) {
+export function ChatMessages({ conversationId, messages, status }: ChatMessagesProps) {
   const isWaiting =
     status === "submitted" && messages.at(-1)?.role === "user";
 
@@ -52,6 +54,7 @@ export function ChatMessages({ messages, status }: ChatMessagesProps) {
                 return null;
               })}
             </MessageContent>
+            <BranchFromMessageButton conversationId={conversationId} message={message} />
           </Message>
         ))}
 

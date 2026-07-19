@@ -18,7 +18,7 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
- * Model Test
+ * Model User
  * 
  */
-export type Test = Prisma.TestModel
+export type User = Prisma.UserModel

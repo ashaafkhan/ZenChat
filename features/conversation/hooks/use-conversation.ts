@@ -13,7 +13,7 @@ import {
 import { queryKeys } from "../utils/query-keys";
 
 
-export function useConversation() {
+export function useConversations() {
     return useQuery({
         queryKey: queryKeys.conversations.all,
         queryFn: () => listConversations(),

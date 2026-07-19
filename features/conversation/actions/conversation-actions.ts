@@ -1,8 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { requireUser } from "@/features/auth/require-user";
 import { prisma } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export type ConversationListItem = {
     id: string;
@@ -29,7 +29,7 @@ async function assertOwnsConversation(conversationId: string, userId: string) {
     return conversation;
 }
 
-export async function listConversations():Promise<ConversationListItem[]> {
+export async function listConversations(): Promise<ConversationListItem[]> {
     const user = await requireUser();
 
     return prisma.conversation.findMany({
@@ -57,6 +57,26 @@ export async function createConversation(title = "New Chat") {
             title: title.trim() || "New Chat",
         },
     });
+}
+
+export async function updateConversation(
+    conversationId: string,
+    data: { title?: string; isPinned?: boolean; isArchived?: boolean }
+) {
+    const user = await requireUser();
+    await assertOwnsConversation(conversationId, user.id);
+
+    const conversation = await prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+            ...(data.title !== undefined ? { title: data.title.trim() || "New Chat" } : {}),
+            ...(data.isPinned !== undefined ? { isPinned: data.isPinned } : {}),
+            ...(data.isArchived !== undefined ? { isArchived: data.isArchived } : {}),
+        },
+    });
+    revalidatePath("/");
+    revalidatePath(`/c/${conversationId}`);
+    return conversation;
 }
 
 export async function deleteConversation(conversationId: string) {

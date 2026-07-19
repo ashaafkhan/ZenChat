@@ -1,6 +1,6 @@
 "use server";
 
-import { requireUser } from "@/features/auth/require-user";
+import { requireUser } from "@/features/auth/action/require-user";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 

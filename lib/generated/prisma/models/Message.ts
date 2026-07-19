@@ -169,7 +169,7 @@ export type MessageGroupByOutputType = {
   role: $Enums.MessageRole
   status: $Enums.MessageStatus
   content: string
-  parts: runtime.JsonValue
+  parts: runtime.JsonValue | null
   metadata: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
@@ -202,7 +202,7 @@ export type MessageWhereInput = {
   role?: Prisma.EnumMessageRoleFilter<"Message"> | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFilter<"Message"> | $Enums.MessageStatus
   content?: Prisma.StringFilter<"Message"> | string
-  parts?: Prisma.JsonFilter<"Message">
+  parts?: Prisma.JsonNullableFilter<"Message">
   metadata?: Prisma.JsonNullableFilter<"Message">
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -215,7 +215,7 @@ export type MessageOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  parts?: Prisma.SortOrder
+  parts?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -231,7 +231,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumMessageRoleFilter<"Message"> | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFilter<"Message"> | $Enums.MessageStatus
   content?: Prisma.StringFilter<"Message"> | string
-  parts?: Prisma.JsonFilter<"Message">
+  parts?: Prisma.JsonNullableFilter<"Message">
   metadata?: Prisma.JsonNullableFilter<"Message">
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -244,7 +244,7 @@ export type MessageOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  parts?: Prisma.SortOrder
+  parts?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -262,7 +262,7 @@ export type MessageScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumMessageRoleWithAggregatesFilter<"Message"> | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusWithAggregatesFilter<"Message"> | $Enums.MessageStatus
   content?: Prisma.StringWithAggregatesFilter<"Message"> | string
-  parts?: Prisma.JsonWithAggregatesFilter<"Message">
+  parts?: Prisma.JsonNullableWithAggregatesFilter<"Message">
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Message">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
@@ -273,7 +273,7 @@ export type MessageCreateInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -286,7 +286,7 @@ export type MessageUncheckedCreateInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -297,7 +297,7 @@ export type MessageUpdateInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -310,7 +310,7 @@ export type MessageUncheckedUpdateInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -322,7 +322,7 @@ export type MessageCreateManyInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -333,7 +333,7 @@ export type MessageUpdateManyMutationInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,7 +345,7 @@ export type MessageUncheckedUpdateManyInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -448,7 +448,7 @@ export type MessageCreateWithoutConversationInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -459,7 +459,7 @@ export type MessageUncheckedCreateWithoutConversationInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -500,7 +500,7 @@ export type MessageScalarWhereInput = {
   role?: Prisma.EnumMessageRoleFilter<"Message"> | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFilter<"Message"> | $Enums.MessageStatus
   content?: Prisma.StringFilter<"Message"> | string
-  parts?: Prisma.JsonFilter<"Message">
+  parts?: Prisma.JsonNullableFilter<"Message">
   metadata?: Prisma.JsonNullableFilter<"Message">
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -511,7 +511,7 @@ export type MessageCreateManyConversationInput = {
   role: $Enums.MessageRole
   status?: $Enums.MessageStatus
   content: string
-  parts: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -522,7 +522,7 @@ export type MessageUpdateWithoutConversationInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -533,7 +533,7 @@ export type MessageUncheckedUpdateWithoutConversationInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -544,7 +544,7 @@ export type MessageUncheckedUpdateManyWithoutConversationInput = {
   role?: Prisma.EnumMessageRoleFieldUpdateOperationsInput | $Enums.MessageRole
   status?: Prisma.EnumMessageStatusFieldUpdateOperationsInput | $Enums.MessageStatus
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  parts?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  parts?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -625,7 +625,7 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     role: $Enums.MessageRole
     status: $Enums.MessageStatus
     content: string
-    parts: runtime.JsonValue
+    parts: runtime.JsonValue | null
     metadata: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date

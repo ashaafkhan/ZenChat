@@ -9,6 +9,7 @@ import { useConversations } from '../hooks/use-conversation';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '../utils/query-keys';
 import { toast } from 'sonner';
+import { ChatEmpty } from './chat-empty';
 
 type ConversationViewProps = {
     conversationId: string;

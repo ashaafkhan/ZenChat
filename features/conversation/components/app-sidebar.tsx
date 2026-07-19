@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   MoreHorizontalIcon,
   PencilIcon,
@@ -72,10 +73,8 @@ export function AppSidebar() {
               className="font-semibold tracking-tight"
               render={<Link href="/" />}
             >
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm text-primary-foreground">
-                C
-              </span>
-              <span>ChaiGPT</span>
+              <Image src="/logo-z.png" alt="ZenChat" width={32} height={32} className="rounded-lg object-contain" />
+              <span>ZenChat</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>

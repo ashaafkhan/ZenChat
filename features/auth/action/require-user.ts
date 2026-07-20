@@ -14,7 +14,9 @@ export async function requireUser(){
         create: {
             clerkId: userId,
             email: clerkUser?.emailAddresses[0]?.emailAddress ?? "",
-            name: clerkUser?.fullName ?? clerkUser?.firstName ?? "User",
+            firstName: clerkUser?.firstName ?? "User",
+            lastName: clerkUser?.lastName ?? "",
+            imageUrl: clerkUser?.imageUrl ?? "",
         },
     });
 

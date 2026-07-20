@@ -15,34 +15,44 @@ import { ChatComposer } from './chat-composer';
 import { BranchSwitcher } from '@/features/branches/components/branch-switcher';
 
 type ConversationViewProps = {
-    conversationId: string;
-    branchId: string;
-    initialMessages: UIMessage[];
+    conversationId?: string;
+    branchId?: string;
+    initialMessages?: UIMessage[];
 };
 
-export const ConversationView = ({ conversationId, branchId, initialMessages }: ConversationViewProps) => {
+export const ConversationView = ({ conversationId, branchId, initialMessages = [] }: ConversationViewProps) => {
 
 
     const queryClient = useQueryClient();
     const {data:conversations} = useConversations();
     
+    // We generate client-side IDs for the first message if none are provided
+    const [cId] = React.useState(() => conversationId ?? `c_${Math.random().toString(36).substring(2, 10)}`);
+    const [bId] = React.useState(() => branchId ?? `b_${Math.random().toString(36).substring(2, 10)}`);
+
     const transport = useMemo(() => new DefaultChatTransport({
         api: "/api/chat",
         prepareSendMessagesRequest: ({messages}) => ({
             body: {
-                branchId, message: messages.at(-1)
+                branchId: bId,
+                conversationId: cId,
+                message: messages.at(-1)
             }
         })
-    }),[branchId]);
+    }),[bId, cId]);
 
     const { messages, sendMessage, status } = useChat({
-        id: conversationId,
+        id: cId,
         messages: initialMessages,
         transport,
         onFinish: () => {
             void queryClient.invalidateQueries({
                 queryKey: queryKeys.conversations.all,
             });
+            // Update the URL to the new conversation if we are on the root page
+            if (!conversationId) {
+                window.history.replaceState({}, "", `/c/${cId}?branch=${bId}`);
+            }
         },
         onError: (error) => {
             toast.error(error.message);
@@ -50,7 +60,7 @@ export const ConversationView = ({ conversationId, branchId, initialMessages }: 
     })
 
     const title =
-        conversations?.find((item) => item.id === conversationId)?.title ?? "Chat";
+        conversations?.find((item) => item.id === cId)?.title ?? "New Chat";
 
     return (
         <div className="flex h-full min-h-0 flex-1 flex-col">
@@ -58,8 +68,8 @@ export const ConversationView = ({ conversationId, branchId, initialMessages }: 
                 <SidebarTrigger />
                 <Separator orientation="vertical" className="mx-1 h-4" />
                 <BranchSwitcher 
-                    conversationId={conversationId} 
-                    activeBranchId={branchId} 
+                    conversationId={cId} 
+                    activeBranchId={bId} 
                     title={title} 
                     messages={messages}
                 />
@@ -68,7 +78,7 @@ export const ConversationView = ({ conversationId, branchId, initialMessages }: 
             {messages.length === 0 ? (
                 <ChatEmpty />
             ) : (
-                <ChatMessages conversationId={conversationId} messages={messages} status={status} />
+                <ChatMessages conversationId={cId} messages={messages} status={status} />
             )}
 
             <ChatComposer

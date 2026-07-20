@@ -9,7 +9,7 @@ import { convertToModelMessages, createIdGenerator, createUIMessageStreamRespons
 export async function POST(req: Request) {
     await auth.protect();
 
-    const { message, branchId }: { message: UIMessage, branchId: string } = await req.json();
+    const { message, branchId, conversationId }: { message: UIMessage, branchId: string, conversationId?: string } = await req.json();
 
     if (!message || !branchId) {
         return new Response("Missing message or branch id", { status: 400 });
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     const user = await requireUser();
 
-    const branch = await prisma.branch.findFirst({
+    let branch = await prisma.branch.findFirst({
         where: {
             id: branchId,
             conversation: {
@@ -26,6 +26,26 @@ export async function POST(req: Request) {
         },
         include: { conversation: true }
     });
+
+    if (!branch && conversationId) {
+        branch = await prisma.$transaction(async (tx) => {
+            const newConversation = await tx.conversation.create({
+                data: {
+                    id: conversationId,
+                    userId: user.id,
+                    title: "New Chat",
+                }
+            });
+            return await tx.branch.create({
+                data: { 
+                    id: branchId,
+                    conversationId: newConversation.id, 
+                    name: "Main" 
+                },
+                include: { conversation: true }
+            });
+        });
+    }
 
     if (!branch) {
         return new Response("Branch not found.", { status: 404 });

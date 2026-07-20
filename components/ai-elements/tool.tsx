@@ -18,15 +18,12 @@ export function Tool({ part }: ToolProps) {
   const isStreaming = part.state === "input-streaming" || part.state === "input-available";
   
   const [isOpen, setIsOpen] = React.useState(isStreaming);
+  const [prevIsStreaming, setPrevIsStreaming] = React.useState(isStreaming);
 
-  React.useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (isStreaming) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
-  }, [isStreaming]);
+  if (isStreaming !== prevIsStreaming) {
+    setPrevIsStreaming(isStreaming);
+    setIsOpen(isStreaming);
+  }
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full mb-2">
@@ -82,7 +79,7 @@ export function ToolContent({ part }: { part: PartType }) {
             let hostname = "";
             try {
               hostname = new URL(result.url).hostname;
-            } catch (_e) {
+            } catch {
               hostname = result.url;
             }
             return (
@@ -95,7 +92,7 @@ export function ToolContent({ part }: { part: PartType }) {
               >
                 <div className="text-sm font-semibold truncate">{result.title}</div>
                 <div className="text-xs text-muted-foreground truncate">{hostname}</div>
-                <div className="mt-1 text-xs text-muted-foreground line-clamp-2">{result.snippet}</div>
+                <div className="mt-1 text-xs text-muted-foreground line-clamp-2">{result.content}</div>
               </a>
             );
           })}

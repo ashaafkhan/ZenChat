@@ -42,7 +42,7 @@ export function ChatMessages({ conversationId, messages, status }: ChatMessagesP
                   return <MessageResponse key={i}>{part.text}</MessageResponse>;
                 }
                 if (part.type === "tool-invocation" || part.type === "tool-web_search" || (part as Record<string, unknown>).toolName === "web_search") {
-                  return <Tool key={i} part={part} />;
+                  return <Tool key={i} part={part as unknown as React.ComponentProps<typeof Tool>["part"]} />;
                 }
                 return null;
               })}

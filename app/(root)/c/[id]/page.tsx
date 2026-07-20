@@ -23,7 +23,7 @@ const page = async ({ params, searchParams }: ConversationPageProps) => {
        const root = await getRootBranch(id);
        branchId = root.id;
     }
-  } catch (error) {
+  } catch {
     notFound()
   }
 

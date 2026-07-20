@@ -115,7 +115,7 @@ export const BranchSwitcher = ({ conversationId, activeBranchId, title, messages
                 }
             }
             setDeleteTarget(null);
-        } catch (error) {
+        } catch {
             // Error is handled by hook's onError Sonner toast
         }
     };

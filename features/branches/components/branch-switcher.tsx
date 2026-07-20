@@ -6,10 +6,10 @@ import {
     DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent
 } from "@/components/ui/dropdown-menu";
 import { 
-    Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator 
+    Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator 
 } from "@/components/ui/breadcrumb";
 import { 
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
+    AlertDialog, AlertDialogCancel, AlertDialogContent, 
     AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -231,7 +231,7 @@ export const BranchSwitcher = ({ conversationId, activeBranchId, title, messages
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete the branch "{deleteTarget?.name}" and all its messages.
+                            This will permanently delete the branch &quot;{deleteTarget?.name}&quot; and all its messages.
                             This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>

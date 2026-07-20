@@ -3,6 +3,7 @@
 import { requireUser } from "@/features/auth/action/require-user";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import type { Message } from "@/lib/generated/prisma/client";
 
 export async function getRootBranch(conversationId: string) {
     const user = await requireUser();
@@ -34,7 +35,7 @@ export async function listBranches(conversationId: string) {
     });
 }
 
-export async function getBranchMessages(branchId: string): Promise<any[]> {
+export async function getBranchMessages(branchId: string): Promise<Message[]> {
     const user = await requireUser();
     
     // We get the branch and ensure ownership
@@ -47,11 +48,11 @@ export async function getBranchMessages(branchId: string): Promise<any[]> {
         }
     });
 
-    let inherited: any[] = [];
+    let inherited: Message[] = [];
     if (branch.parentBranchId && branch.branchPointMessageId) {
         const parentMessages = await getBranchMessages(branch.parentBranchId);
         const cutoff = parentMessages.findIndex(
-            (m: any) => m.id === branch.branchPointMessageId
+            (m: Message) => m.id === branch.branchPointMessageId
         );
         inherited = cutoff >= 0 ? parentMessages.slice(0, cutoff + 1) : parentMessages;
     }

@@ -3,8 +3,15 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { SearchIcon, CheckCircleIcon, AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+type PartType = {
+  state?: string;
+  output?: { error?: string; results?: { url: string; title: string; content?: string }[] };
+  errorText?: string;
+  input?: { query?: string };
+};
+
 type ToolProps = {
-  part: any;
+  part: PartType;
 };
 
 export function Tool({ part }: ToolProps) {
@@ -13,6 +20,7 @@ export function Tool({ part }: ToolProps) {
   const [isOpen, setIsOpen] = React.useState(isStreaming);
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isStreaming) {
       setIsOpen(true);
     } else {
@@ -28,7 +36,7 @@ export function Tool({ part }: ToolProps) {
   );
 }
 
-export function ToolHeader({ part, isOpen }: { part: any; isOpen: boolean }) {
+export function ToolHeader({ part, isOpen }: { part: PartType; isOpen: boolean }) {
   const isStreaming = part.state === "input-streaming" || part.state === "input-available";
   const isError = !!part.output?.error || !!part.errorText;
   const query = part.input?.query || "something";
@@ -50,7 +58,7 @@ export function ToolHeader({ part, isOpen }: { part: any; isOpen: boolean }) {
   );
 }
 
-export function ToolContent({ part }: { part: any }) {
+export function ToolContent({ part }: { part: PartType }) {
   const isError = !!part.output?.error || !!part.errorText;
   const errorMsg = part.output?.error || part.errorText;
   const results = part.output?.results || [];
@@ -70,11 +78,11 @@ export function ToolContent({ part }: { part: any }) {
         </Alert>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          {results.map((result: any, i: number) => {
+          {results.map((result: {url: string; title: string; content?: string}, i: number) => {
             let hostname = "";
             try {
               hostname = new URL(result.url).hostname;
-            } catch (e) {
+            } catch (_e) {
               hostname = result.url;
             }
             return (

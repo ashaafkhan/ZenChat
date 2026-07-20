@@ -26,7 +26,7 @@ export function useCreateConversation() {
 
     return useMutation({
         mutationFn: (title?: string) => createConversation(title),
-        onSuccess: (conversation: any) => {
+        onSuccess: (conversation: Awaited<ReturnType<typeof createConversation>>) => {
             void queryClient.invalidateQueries({
                 queryKey: queryKeys.conversations.all,
             });

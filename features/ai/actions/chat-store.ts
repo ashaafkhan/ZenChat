@@ -28,7 +28,7 @@ export async function loadChatMessages(
 ): Promise<UIMessage[]> {
   const rows = await getBranchMessages(branchId);
 
-  return rows.map((row: any) => ({
+  return rows.map((row: typeof rows[number]) => ({
     id: row.id,
     role: row.role === "ASSISTANT" ? "assistant" : "user",
     parts: toUIMessageParts(row.parts, row.content),

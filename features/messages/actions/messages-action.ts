@@ -114,7 +114,7 @@ export async function createMessage(conversationId: string, content: string, bra
 }
 
 export async function updateMessage(messageId: string, content: string) {
-    const user = await requireUser();
+    await requireUser();
     const trimmed = content.trim();
 
     if (!trimmed) {
@@ -142,7 +142,7 @@ export async function updateMessage(messageId: string, content: string) {
 }
 
 export async function deleteMessage(messageId: string) {
-    const user = await requireUser();
+    await requireUser();
 
     const existing = await prisma.message.findUnique({
         where: { id: messageId },

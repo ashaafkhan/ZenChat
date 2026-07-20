@@ -45,7 +45,7 @@ export async function searchWeb(
 
         const data = await response.json();
         
-        return (data.results || []).map((result: any) => ({
+        return (data.results || []).map((result: {title: string, url: string, content: string}) => ({
             title: result.title,
             url: result.url,
             snippet: result.content,

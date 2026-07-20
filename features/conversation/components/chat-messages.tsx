@@ -6,7 +6,6 @@ import type { ChatStatus } from "ai";
 import {
   Conversation,
   ConversationContent,
-  ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import {
   Message,
@@ -17,13 +16,7 @@ import { Loader } from "@/components/ai-elements/loader";
 import { Tool } from "@/components/ai-elements/tool";
 import { BranchFromMessageButton } from "@/features/branches/components/branch-from-message-button";
 
-/** Extracts plain text from a `UIMessage` by joining all text parts. */
-function getMessageText(message: UIMessage) {
-  return message.parts
-    .filter(isTextUIPart)
-    .map((part) => part.text)
-    .join("");
-}
+
 
 type ChatMessagesProps = {
   conversationId: string;
@@ -48,7 +41,7 @@ export function ChatMessages({ conversationId, messages, status }: ChatMessagesP
                 if (isTextUIPart(part)) {
                   return <MessageResponse key={i}>{part.text}</MessageResponse>;
                 }
-                if (part.type === "tool-invocation" || part.type === "tool-web_search" || (part as any).toolName === "web_search") {
+                if (part.type === "tool-invocation" || part.type === "tool-web_search" || (part as Record<string, unknown>).toolName === "web_search") {
                   return <Tool key={i} part={part} />;
                 }
                 return null;
